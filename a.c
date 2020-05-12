@@ -3,8 +3,11 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#define MSGSIZE 200
 
 int main(void) {
+
+	char inbuf[MSGSIZE];
 	pid_t childpid, childpid2;
 	int fd[2];
 
@@ -14,7 +17,7 @@ int main(void) {
 	}
 
 	if (childpid == 0) { 				//Child
-		printf("Inside the first child\n");
+		//printf("Inside the first child\n");
 		if (dup2(fd[1], STDOUT_FILENO) == -1){
 			perror("Failed to redirect stdout of tail");
 		}
@@ -24,8 +27,8 @@ int main(void) {
 		}	
 		
 		else {
-			printf("About to run tail\n");
-			execl("/usr/bin/tail", "tail", "b.txt", NULL);
+			//printf("About to run tail\n");
+			execl("/usr/bin/tail", "tail", "-5", "b.txt", NULL);
 			perror("Failed to exec tail");
 		}
 		return 1;
@@ -54,6 +57,7 @@ int main(void) {
 		}
 
 		else{
+
 			wait(NULL);
 			printf("In parent\n");
 
@@ -64,8 +68,10 @@ int main(void) {
 				perror("Failed to close extra pipe file descriptors on sort");
 			}
 			else {
-				execl("/usr/bin/sort", "sort", NULL);
-				perror("Failed to exec sort");
+				read(fd[0], inbuf, MSGSIZE);
+				printf("%s\n", inbuf);
+				//execl("/usr/bin/sort", "sort", NULL);
+				//perror("Failed to exec sort");
 			}
 			return 1;
 		}
