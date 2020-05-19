@@ -1,5 +1,5 @@
-he is a good boy
-he is 22 years old
-she likes geeks
-his favourite player is rvp
-he has always liked him
+1. he is a good boy
+2. he is 22 years old
+3. he is a geek
+4. his favourite player is rvp
+5. he has always liked him
